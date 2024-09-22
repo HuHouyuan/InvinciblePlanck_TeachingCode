@@ -3,7 +3,7 @@ Author: Morgan Hu
 
 Welcome to Invincible Planck! I'm pretty sure you will have a great time figuring out various algorithms and coorperating with your friends!
 When you are reading this document for the first time and wish to learn the basic functions & algorithms used in VEX Robotics,
-first go to the robot-config.h file :)
+first go to the robot-config.h file :) Note that the wait function literally makes the code stop for the assigned time.
 */
 #include "robot-config.h"
 #include "declaration.h"
