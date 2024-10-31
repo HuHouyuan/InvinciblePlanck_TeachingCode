@@ -13,9 +13,9 @@ using namespace vex;
 competition Competition;
 
 int autoRoute = 1;
-/* Before every match, we want to have choose the desired autonomous route, and each route corresponds
-   to a seperate function in the autopath.h file Before going to the autopath.h file, you may first
-   you may move on to the autonomous function and check out the common functions & algorithms used for the autonomous period */
+/* Before every match, we want to choose the desired autonomous route, and each route corresponds
+   to a seperate function in the autopath.h file. Before going to the autopath.h file, you may first
+   move on to the autonomous function and check out the common functions & algorithms used for the autonomous period */
 /* Note that code for switching autoRoute is in usercontrol function*/
 void autonomous(void)
 {
@@ -73,7 +73,7 @@ void usercontrol(void)
       function();
     }
 
-    you will find that the shooting range has changed multiple times. This is because when humans press buttons, we inevitably press
+    you will find that the shooting range has changed more than once after the button is pressed. This is because when humans press buttons, we inevitably press
     it for a longer time then the time of each while loop (20msec). So, even if you think you just pressed the button once, the code
     thinks that you have pressed the button mulitple times. Thus, in order to solve this problem, the best approach is to call the function
     if a button is released after pressing
