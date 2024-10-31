@@ -24,8 +24,8 @@ reverse the default positive direction of the motor */
 /* For the gear setting, enter ratio6_1, ratio18_1, or ratio36_1 according to the motor used. Enter ratio6_1 if the red motor is used，
 ratio18_1 if the green motor is used, and ratio6_1 if the blue motor is used. If you are not sure which motor is used, ask the builder*/
 /* Motors have a default positive direction, which you can obtain my looking at the motor box. If you want the default direction
-to stay the same with the direction indicated on the box, enter 0. Otherwise if you want the default direction to be the opposite one,
-enter 1 */
+to stay the same with the direction indicated on the box, enter false. Otherwise if you want the default direction to be the opposite one,
+enter true */
 motor LF = motor(PORT1, ratio6_1, 0); // motor for the left front wheel
 motor LB = motor(PORT2, ratio6_1, 0); // motor for the left back wheel
 motor RF = motor(PORT3, ratio6_1, 0); // motor for the right front wheel
