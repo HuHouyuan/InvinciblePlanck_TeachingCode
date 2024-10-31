@@ -25,7 +25,7 @@ void driveRotate(float v)
 
 /* this function takes the input value and set the velocity for the robot to move forward/backward for a set of time
    timerForward is often used to make sure the robot moves to a point, especially reaching some static objects like a wall. */
-/* the timer() returns the time recorded on the brain*/
+/* timer() returns the time recorded on the brain*/
 void timerForward(float v, float t)
 {
   float initT = Brain.timer(msec);
@@ -78,7 +78,7 @@ void encoderForward(float v, float target)
    There are three steps needed to make the car move accurately.
    The first step is P, which stands for proportion. When the car moves more close to the target,
    we make the velocity lower. The slope for this change is defined using the constant Kp. Larger
-   the Kp, slower the velocity is reduced as it reaches the target.
+   the Kp, faster the velocity of the car is as it reaches the target.
    In the ideal situation, when the car reaches the target, we wish the velocity is just
    reduced to zero.However, in reality, it's not possible. Although we can set Kp very small, so that
    the car moves in a very slow velocity and eventually will reach the target accurately, it's too slow.
@@ -90,9 +90,17 @@ void encoderForward(float v, float target)
    eventually reaching the target point with precision.
 
    In order to reduce the times of oscillation, the second step, D, which stands for derivative, comes into play.
-   The idea is that, we want to further reduce the velocity of the car if the car's velocity is too large when it's
-   near to the target. The larger the velocity, the more we want the velocity to reduce, preventing exceeding the target.
+   The idea is that, we want to further reduce the velocity of the car if the car's velocity is too large , which helps to 
+   slow the car down befroe the target. The larger the velocity, the more we want the velocity to reduce, preventing exceeding the target.
    As Kp increases, the velocity decreases more intensely. By adding Kd, the time of oscillation will greatly reduce.
+
+   Here is a demonstration of how Kp and Kd works together:
+   When the car first starts, the error, which means the distance between the car and the target is large, so the P portion will have a large
+   value. The D portion has a value smaller than P, so the car moves forward. When the car reaches the target, if there's only P, the car will
+   still have a large velocity, because we set Kp to a large number to ensure quickness. Yet, P is still decreasing, because the error is decreasing.
+   When the car maintains the high speed yet P portion decreases, the D portion would exceed the P portion at some time, restraining the 
+   velocity of the car and making it stop. It's the programmer's job to adjust Kp and Kd to ensure that the car has a high velocity at start but 
+   quickly stops before the target.
 
    However, sometimes you may find the car "stop" infront of the target location. This is due to the forward force given
    by the motor is canceled out by the friction force, making the car unable to keep moving forward. How the I term exactly works
@@ -103,11 +111,11 @@ void encoderForward(float v, float target)
    Finally, we have to make the car stop when it accurately reaches the desired location. There are two conditions need to be met before
    the PID stops. First, the error between the car's current displacement and the target displacement has to be smaller than a specific value,
    which is called tolerance. Second, the velocity of the car also have to be small enough, so it will not be affected by inertia significantly
-   even after PID stops. When these two conditions are met, we can thinkg that the car has accurately reached the target location.
+   after PID stops. When these two conditions are met, we can thinkg that the car has accurately reached the target location.
 
    Note that in the function given, we do not assign velocity when using the PID algorithm. This is because the PID algorithm is supposed
    to calculate the velocity by itself. In more advanced PID algorithms, you can add a parameter called v_limit which limits the maximum
-   velocity for the car if you want the car to move in a slow speed. We will go over the more advanced model of PID during trainings and
+   velocity for the car if you want the car's maximum speed not to exceed the limit. We will go over the more advanced modela of PID during trainings and
    learn more about other improvements to the PID algorithm, such as detecting the current time used to see if the robot is stuck at a place
    or using slow incremement during the beginning of the movement to restrain the car's starting velocity.
    */
@@ -169,18 +177,19 @@ void PIDForward(float target, float tolerance = 30)
    So, use encoderForward during short movements and the error will not greatly affect the performance
    Use PIDForward when you want accurate locomotion or during long distance movements.
    However, despite the advantages regarding time usage of encoderForward, PIDForward is often used in most
-   cases, since we do not want errors to be too large in most cases. */
+   cases, since the time saved by using encoderForward does not bring compatible advantages 
+   compared to the accuracy of PID in most cases. */
 
 /* this is the PID algorithm for rotation after finishing this part, you may move on to the autopath.h file to see
 how we actually code an autonomous path for the robot */
 /* Note that right is the positive direction of rotation for the gyro. And, when using this PIDGyroTurn,
 instead of making the car to rotate a specific angle, we let the car to turn to a specific angle. This approach
-is better because it reduces error accumulatio (explanation: although PID is already very accurate, it still
+is better because it reduces error accumulation (explanation: although PID is already very accurate, it still
 makes insignificant errors after each action. So, for example, after the robot rotates many times, the small errors generated from
 each PIDGyroTurn will accumulate, making the accumulated error significant enough to affect the automation. However, by making the robot
 turn to a specific direction, error accumulation can be greatly reduced). Another brilliant way to reduce error accumulation
 during locomotion is using a complex algorithm called odometry. You will briefly learn this algorithm during the first few trainings,
-but mastering it and coding your own odometry algorithm may take lots of months and even years. */
+but mastering it and coding your own odometry algorithm may require months and even years of working as a programmer. */
 void PIDGyroTurn(float target, float tolerance = 1)
 {
   float kp = 3;
